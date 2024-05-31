@@ -193,6 +193,6 @@ const Edit = () => {
  *
  * [Learn more](https://inertiajs.com/pages#persistent-layouts)
  */
-Edit.layout = (page: React.ReactNode) => <MainLayout children={page} />;
+// Edit.layout = (page: React.ReactNode) => <MainLayout children={page} />;
 
 export default Edit;

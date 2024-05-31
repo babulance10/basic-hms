@@ -9,7 +9,7 @@ export interface User {
   owner: string;
   photo: string;
   deleted_at: string;
-  account: Account;
+  //account: Account;
 }
 
 export interface Account {
@@ -49,6 +49,26 @@ export interface Organization {
   postal_code: string;
   deleted_at: string;
   contacts: Contact[];
+}
+
+export interface Menu {
+  id: number;
+  name: string;
+  icon?: string;
+  url: string;
+  children?: Menu[];
+}
+
+export interface Patient {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  gender: 'male' | 'female' | 'other';
+  birth_date: Date;
+  deleted_at: string;
 }
 
 export type PaginatedData<T> = {

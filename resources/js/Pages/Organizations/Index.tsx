@@ -59,8 +59,8 @@ function Index() {
  *
  * [Learn more](https://inertiajs.com/pages#persistent-layouts)
  */
-Index.layout = (page: React.ReactNode) => (
-  <MainLayout title="Organizations" children={page} />
-);
+// Index.layout = (page: React.ReactNode) => (
+//   <MainLayout title="Organizations" children={page} />
+// );
 
 export default Index;

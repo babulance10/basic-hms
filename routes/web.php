@@ -8,6 +8,7 @@ use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::resource('patients', PatientController::class);
+// });
+
+// Route::get('patients', [PatientController::class, 'index'])
+//     ->name('patients')
+//     ->middleware('auth');
+Route::resource('patients', PatientController::class)->names([
+    'index' => 'patients',
+])->middleware('auth');
 
 // Auth
 
