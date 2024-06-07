@@ -11,7 +11,7 @@ export default function FlashedMessages() {
   useEffect(() => {
     setVisible(true);
   }, [flash, errors]);
-
+  console.log(errors);
   return (
     <>
       {flash.success && visible && (

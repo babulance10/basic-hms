@@ -25,7 +25,14 @@ class DatabaseSeeder extends Seeder
             'owner' => true,
         ]);
 
-       
+        $this->call([
+            ManufacturerSeeder::class,
+            ProductTypeSeeder::class,
+            ProductSeeder::class,
+            PharmacyInventorySeeder::class,
+            MenuTableSeeder::class
+            // Add any other seeders you want to run here
+        ]);
 
         // User::factory(5)->create(['account_id' => $account->id]);
 

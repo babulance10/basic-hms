@@ -52,23 +52,9 @@ class PatientController extends Controller
      */
     public function store(StorePatientRequest $request): RedirectResponse
     {
-        // $patient = Patient::create([
-        //     'first_name' => $request->input('first_name'),
-        //     'last_name' => $request->input('last_name'),
-        //     'email' => $request->input('email'),
-        //     'phone' => $request->input('phone'),
-        //     'address' => $request->input('address'),
-        //     'gender' => $request->input('gender'),
-        //     'birth_date' => $request->input('birth_date'),
-        //     // Add other fields as needed
-        // ]);
-        Log::info($request->validated());
         Patient::create(
             $request->validated()
         );
-
-        // return redirect()->route('patients')
-        //     ->with('success', 'Patient created successfully.');
         return Redirect::route('patients')->with('success', 'Patient created successfully.');
     }
 

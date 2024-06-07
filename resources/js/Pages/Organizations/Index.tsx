@@ -1,5 +1,4 @@
 import { Link, usePage } from '@inertiajs/react';
-import MainLayout from '@/Layouts/MainLayout';
 import FilterBar from '@/Components/FilterBar/FilterBar';
 import Pagination from '@/Components/Pagination/Pagination';
 import { Organization, PaginatedData } from '@/types';
@@ -53,14 +52,5 @@ function Index() {
     </div>
   );
 }
-
-/**
- * Persistent Layout (Inertia.js)
- *
- * [Learn more](https://inertiajs.com/pages#persistent-layouts)
- */
-// Index.layout = (page: React.ReactNode) => (
-//   <MainLayout title="Organizations" children={page} />
-// );
 
 export default Index;

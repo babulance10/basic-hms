@@ -3,12 +3,18 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GrnController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\ManufacturerController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ProductTypeController;
+use App\Http\Controllers\SupplierController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,16 +27,31 @@ use App\Http\Controllers\PatientController;
 |
 */
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::resource('patients', PatientController::class);
-// });
 
-// Route::get('patients', [PatientController::class, 'index'])
-//     ->name('patients')
-//     ->middleware('auth');
 Route::resource('patients', PatientController::class)->names([
     'index' => 'patients',
 ])->middleware('auth');
+
+Route::resource('productTypes', ProductTypeController::class)->names([
+    'index' => 'productTypes',
+])->middleware('auth');
+
+Route::resource('suppliers', SupplierController::class)->names([
+    'index' => 'suppliers',
+])->middleware('auth');
+
+Route::resource('products', ProductController::class)->names([
+    'index' => 'products',
+])->middleware('auth');
+
+Route::resource('manufacturers', ManufacturerController::class)->names([
+    'index' => 'manufacturers',
+])->middleware('auth');
+
+Route::resource('grns', GrnController::class)->names([
+    'index' => 'grns',
+])->middleware('auth');
+
 
 // Auth
 

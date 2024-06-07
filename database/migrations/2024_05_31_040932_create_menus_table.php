@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable(); // For sub-menus
             $table->string('name');
             $table->string('icon')->nullable();
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->integer('order')->default(0); // Order of the menu items
             $table->boolean('status')->default(true);
             $table->foreign('parent_id')->references('id')->on('menus')->onDelete('cascade');

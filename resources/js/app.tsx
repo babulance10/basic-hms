@@ -26,7 +26,7 @@ createInertiaApp({
 });
 
 function setupPageLayout(module: any, name:string) {
-  if (!module.default.layout) {
+  if (!module.default.layout && name !== 'Auth/Login') {
     module.default.layout = (page: any) => {
       return <MainLayout title={page.type.name.replace("Page","")} children={page} menus={page.props.menus}></MainLayout>;
     };

@@ -1,5 +1,4 @@
 import { Link, useForm } from '@inertiajs/react';
-import MainLayout from '@/Layouts/MainLayout';
 import LoadingButton from '@/Components/Button/LoadingButton';
 import TextInput from '@/Components/Form/TextInput';
 import SelectInput from '@/Components/Form/SelectInput';
@@ -145,14 +144,4 @@ const Create = () => {
     </div>
   );
 };
-
-/**
- * Persistent Layout (Inertia.js)
- *
- * [Learn more](https://inertiajs.com/pages#persistent-layouts)
- */
-// Create.layout = (page: React.ReactNode) => (
-//   <MainLayout title="Create Organization" children={page} />
-// );
-
 export default Create;
