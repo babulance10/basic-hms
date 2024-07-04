@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import {
   TextField,
@@ -11,8 +11,11 @@ import {
 import BillingItemTable from './Components/PharmacyItemBillTable';
 import { usePharmacyBillingForm } from './Components/Util';
 import { Patient } from '@/types';
+import PrintButton from './Components/PrintButton';
+import ComponentToPrint from './Components/ComponentToPrint';
 
 const PharmacyBillingEditPage = () => {
+  const componentRef = useRef();
   const {
     data,
     setData,
@@ -129,14 +132,23 @@ const PharmacyBillingEditPage = () => {
             variant="contained"
             color="primary"
             disabled={processing}
+            sx={{ m: 2 }}
           >
             Update
           </Button>
+          <PrintButton contentRef={componentRef} />
+
+          <div style={{ display: 'none' }}>
+            <ComponentToPrint
+              ref={componentRef}
+              billingData={data}
+              itemData={data.billing_items}
+            />
+          </div>
         </Paper>
       </form>
     </div>
   );
-
 };
 
 export default PharmacyBillingEditPage;

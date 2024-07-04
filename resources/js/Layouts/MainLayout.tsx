@@ -11,18 +11,25 @@ interface MainLayoutProps {
   menus: Menu[];
 }
 
-export default function MainLayout({ title, children, menus }: MainLayoutProps) {
+export default function MainLayout({
+  title,
+  children,
+  menus
+}: MainLayoutProps) {
   return (
     <>
       <Head title={title} />
       <div className="flex flex-col">
         <div className="flex flex-col h-screen">
           <div className="md:flex">
-            <TopHeader />
+            <TopHeader menus={menus} />
             <BottomHeader />
           </div>
           <div className="flex flex-grow overflow-hidden">
-            <MainMenu className="flex-shrink-0 hidden w-56 p-4 overflow-y-auto bg-indigo-800 md:block" menus={menus} />
+            <MainMenu
+              className="flex-shrink-0 hidden w-56 p-4 overflow-y-auto bg-indigo-800 md:block"
+              menus={menus}
+            />
             {/**
              * We need to scroll the content of the page, not the whole page.
              * So we need to add `scroll-region="true"` to the div below.
