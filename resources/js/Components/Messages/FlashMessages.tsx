@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import Alert from '@/Components/Alert/Alert';
+import { isEmpty } from 'lodash';
 
 export default function FlashedMessages() {
   const [visible, setVisible] = useState(true);
@@ -11,7 +12,7 @@ export default function FlashedMessages() {
   useEffect(() => {
     setVisible(true);
   }, [flash, errors]);
-  console.log(errors);
+  if (!isEmpty(errors)) console.error(errors);
   return (
     <>
       {flash.success && visible && (

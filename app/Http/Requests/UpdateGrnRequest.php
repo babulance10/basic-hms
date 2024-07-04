@@ -30,6 +30,15 @@ class UpdateGrnRequest extends FormRequest
             'remarks' => 'nullable|string',
             'adjustment' => 'sometimes|numeric',
             'grn_items' => 'required|array',
+            'grn_items.*.product_id' => 'required|exists:products,id',
+            'grn_items.*.pack' => 'required|string',
+            'grn_items.*.batch_no' => 'required|string',
+            'grn_items.*.expiry_date' => 'required|date',
+            'grn_items.*.mrp' => 'required|numeric',
+            'grn_items.*.quantity' => 'required|integer',
+            'grn_items.*.free' => 'sometimes|integer',
+            'grn_items.*.unit_price' => 'required|numeric',
+            'grn_items.*.discount_percentage' => 'nullable|numeric'
         ];
     }
 }

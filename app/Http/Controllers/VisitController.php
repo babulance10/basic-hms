@@ -2,33 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVisitRequest;
+use App\Http\Requests\UpdateVisitRequest;
+use App\Http\Resources\PatientCollection;
+use App\Http\Resources\VisitCollection;
+use App\Models\Patient;
 use App\Models\Visit;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Request;
 
 class VisitController extends Controller
 {
     public function index()
     {
-        $visits = Visit::with('patient')->orderBy('visit_date', 'desc')->get();
-        return Inertia::render('Visits/Index', ['visits' => $visits]);
+        return Inertia::render('Visits/Index', [
+            'filters' => Request::all('search'),
+            'visits' =>  new VisitCollection(
+                Visit::orderBy('start_time')
+                    ->filter(Request::only('search'))
+                    ->paginate()
+                    ->appends(Request::all())
+            )
+        ]);
     }
 
     public function create()
     {
-        return Inertia::render('Visits/Create');
+        return Inertia::render('Visits/Create', [
+            'patients' => new PatientCollection(Patient::orderBy('email')->get())
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreVisitRequest $request)
     {
-        $validatedData = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'visit_date' => 'required|date',
-            // Add other validation rules as needed
-        ]);
-
-        Visit::create($validatedData);
-        return redirect()->route('visits.index')->with('success', 'Visit created successfully.');
+        $validated = $request->validated();
+        Visit::create($validated);
+        return redirect()->route('visits')->with('success', 'Visit created successfully.');
     }
 
     public function show(Visit $visit)
@@ -38,19 +48,24 @@ class VisitController extends Controller
 
     public function edit(Visit $visit)
     {
-        return Inertia::render('Visits/Edit', ['visit' => $visit]);
+        // Return a view to edit the products
+        return Inertia::render('Visits/Edit', [
+            'visit' => $visit,
+            'patients' => (object) Patient::where('id', $visit->patient_id)->first([
+                'id',
+                'first_name',
+                'last_name'
+            ])->toArray()
+        ]);
     }
 
-    public function update(Request $request, Visit $visit)
+    public function update(UpdateVisitRequest $request, Visit $visit)
     {
-        $validatedData = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'visit_date' => 'required|date',
-            // Add other validation rules as needed
-        ]);
-
-        $visit->update($validatedData);
-        return redirect()->route('visits.index')->with('success', 'Visit updated successfully.');
+        $validated = $request->validated();
+        $visit->update(
+            $validated
+        );
+        return redirect()->route('visits')->with('success', 'Visit updated successfully.');
     }
 
     public function destroy(Visit $visit)

@@ -12,9 +12,10 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PharmacyBillingController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\SupplierController;
-use App\Models\Product;
+use App\Http\Controllers\VisitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,14 @@ Route::resource('manufacturers', ManufacturerController::class)->names([
 
 Route::resource('grns', GrnController::class)->names([
     'index' => 'grns',
+])->middleware('auth');
+
+Route::resource('visits', VisitController::class)->names([
+    'index' => 'visits',
+])->middleware('auth');
+
+Route::resource('pharmacy-bills', PharmacyBillingController::class)->names([
+    'index' => 'pharmacy-bills',
 ])->middleware('auth');
 
 

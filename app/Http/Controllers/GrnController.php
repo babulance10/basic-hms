@@ -62,7 +62,6 @@ class GrnController extends Controller
     {
         //dd('Data grn items',$request->all());
         $validated = $request->validated();
-        //dd("Before data", $validated);
         try {
             DB::transaction(function () use ($validated) {
                 // Create the GRN record
@@ -107,6 +106,8 @@ class GrnController extends Controller
         // return Inertia::render('Grns/Edit', [
         //     'grn' => new GrnResource($grn),
         // ]);
+        $query = Grn::where('id', 1)->toSql();
+        dd($query);
         // Load the related GrnItems
         $grn->load('grnItems');
 
@@ -153,8 +154,6 @@ class GrnController extends Controller
                     unset($itemData['gst']);
                     unset($itemData['amount']);
                     if (isset($itemData['id']) && $item = $grn->grnItems()->find($itemData['id'])) {
-                        // Update the existing item
-                        //dd($itemData);
                         $item->update($itemData);
                     } else {
                         // Create a new item

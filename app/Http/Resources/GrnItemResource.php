@@ -13,13 +13,15 @@ class GrnItemResource extends JsonResource
             'grn_id' => $this->grn_id,
             'product_id' => $this->product_id,
             'pack' => $this->pack,
-            'batch_number' => $this->batch_no,
+            'batch_no' => $this->batch_no,
             'expiry_date' => $this->expiry_date,
             'mrp' => $this->mrp,
             'quantity' => $this->quantity,
             'free' => $this->free,
             'unit_price' => $this->unit_price,
             'discount_percentage' => $this->discount_percentage,
+            'name' => $this->product->name,
+            'gst' => $this->product->gst_category
         ];
     }
 }

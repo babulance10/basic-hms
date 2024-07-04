@@ -20,49 +20,27 @@ import {
   TaxData,
   TotalTaxData
 } from '@/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GrnItemTable from '@/Components/DataPage/GrnItemTable';
 import Box from '@mui/material/Box';
 import TaxTable from '@/Components/DataPage/TaxTable';
+import { useGrnForm } from './Util';
 
 const GRNPage = () => {
-  const initialFormData: Grn = {
-    grn_no: '',
-    received_date: '',
-    bill_no: '',
-    payment_mode: 'Credit', // Default to 'Credit' or any other default value you prefer
-    remarks: '',
-    supplier_id: '', // Assuming this is a string; adjust if it's a number
-    adjustment: '0.00',
-    grn_items: [] // Start with an empty array for GRN items
-  };
-  const { data, setData, errors, post, processing } =
-    useForm<Grn>(initialFormData);
-  const { products, suppliers } = usePage<{
-    products: Product[];
-    suppliers: Supplier[];
-  }>().props;
-  const initialTaxData = [
-    { rate: 0, amount: 0, cgst: 0, sgst: 0 },
-    { rate: 5, amount: 0, cgst: 0, sgst: 0 },
-    { rate: 12, amount: 0, cgst: 0, sgst: 0 },
-    { rate: 18, amount: 0, cgst: 0, sgst: 0 },
-    { rate: 28, amount: 0, cgst: 0, sgst: 0 }
-  ];
-  const initialTotalTaxData = {
-    grossAmount: 0,
-    totalDiscount: 0,
-    totalAmount: 0,
-    totalCgst: 0,
-    totalSgst: 0,
-    roundOff: 0,
-    netAmount: 0
-  };
-
-  const [taxData, setTaxData] = useState<TaxData[]>(initialTaxData);
-
-  const [totalTaxData, setTotalTaxData] =
-    useState<TotalTaxData>(initialTotalTaxData);
+  const {
+    data,
+    setData,
+    errors,
+    processing,
+    taxData,
+    totalTaxData,
+    handleAddData,
+    handleSubmit,
+    suppliers,
+    products,
+    clearTaxState,
+    paymentModes
+  } = useGrnForm('create');
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -71,89 +49,6 @@ const GRNPage = () => {
     textAlign: 'center',
     color: theme.palette.text.secondary
   }));
-  const paymentModes = [
-    'Credit',
-    'Cash',
-    'Debit Card',
-    'Credit Card',
-    'Online',
-    'Cheque'
-  ];
-
-  const clearTaxState = () => {
-    setTotalTaxData({ ...initialTotalTaxData });
-    setTaxData([...initialTaxData]);
-  };
-
-  const handleAddData = (items: GrnItem[]) => {
-    // Clear the state first
-    clearTaxState();
-
-    // Create new copies of the state objects
-    let newTaxData = [...initialTaxData];
-    let newTotalTaxData = { ...initialTotalTaxData };
-
-    // Use a single loop to calculate all totals
-    items.forEach(row => {
-      let gstRate =
-        products.find(product => product.id.toString() == row.product_id)
-          ?.gst_category || '0';
-      gstRate = gstRate.replace('%', '');
-      let currentIndex = newTaxData.findIndex(
-        data => data.rate.toString() === gstRate
-      );
-
-      if (currentIndex !== -1) {
-        const amount = row.amount || 0;
-        const discount = parseFloat(
-          ((amount * row.discount_percentage) / 100).toFixed(2)
-        );
-        const cgst = parseFloat(
-          (((newTaxData[currentIndex].rate / 2) * amount) / 100).toFixed(2)
-        );
-        const sgst = cgst; // SGST is equal to CGST
-        // Update the tax data for the current rate
-        newTaxData[currentIndex].amount += amount;
-        newTaxData[currentIndex].cgst = parseFloat(
-          (newTaxData[currentIndex].cgst + cgst).toFixed(2)
-        );
-        newTaxData[currentIndex].sgst = newTaxData[currentIndex].cgst;
-
-        // Update the total tax data
-        newTotalTaxData.totalDiscount += discount;
-        newTotalTaxData.grossAmount += amount;
-        newTotalTaxData.totalCgst += cgst;
-        newTotalTaxData.totalSgst = newTotalTaxData.totalCgst;
-      }
-    });
-
-    // Calculate the final totals
-    newTotalTaxData.totalAmount =
-      newTotalTaxData.grossAmount - newTotalTaxData.totalDiscount;
-    newTotalTaxData.netAmount =
-      newTotalTaxData.totalAmount +
-      newTotalTaxData.totalCgst +
-      newTotalTaxData.totalSgst +
-      newTotalTaxData.roundOff;
-    Object.keys(newTotalTaxData).forEach(key => {
-      newTotalTaxData[key] = parseFloat(newTotalTaxData[key].toFixed(2));
-    });
-
-    // Set the new state
-    setTaxData(newTaxData);
-    setTotalTaxData(newTotalTaxData);
-    // Continue with setting 'grn_items'
-    setData('grn_items', items);
-  };
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const finalData = {
-      ...data,
-      grn_items: data.grn_items
-    };
-    post(route('grns.store'), finalData);
-  }
 
   const options = suppliers.map(type => ({
     value: type.id + '',
@@ -161,12 +56,10 @@ const GRNPage = () => {
   }));
 
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>();
-
   return (
     <div>
-      {/* GRN Details TextFields */}
       <div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={e => handleSubmit(e, 'store')}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 4 }}>
             <Box display="flex" justifyContent="flex-end">
               <Button

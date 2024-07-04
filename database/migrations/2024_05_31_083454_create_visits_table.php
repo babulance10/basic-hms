@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('visits', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('patient_id');
+            $table->foreignId('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->dateTime('start_time');
             $table->dateTime('end_time')->nullable();
             $table->enum('type', ['inpatient', 'outpatient']); // Type of visit
@@ -22,8 +22,6 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->enum('status', ['scheduled', 'ongoing', 'completed', 'cancelled']);
             $table->timestamps();
-        
-            $table->foreign('patient_id')->references('id')->on('patients');
         });
     }
 

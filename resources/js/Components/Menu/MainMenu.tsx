@@ -1,56 +1,49 @@
 import MainMenuItem from '@/Components/Menu/MainMenuItem';
-//import { Building, CircleGauge, Printer, Users } from 'lucide-react';
-import { icons } from 'lucide-react';
-import { Link, usePage } from '@inertiajs/react';
+import { icons as LucideIcons } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 import { Menu } from '@/types';
+import { isEmpty } from 'lodash';
+import * as MuiIcons from '@mui/icons-material';
 
 interface MainMenuProps {
   className?: string;
   menus?: Menu[];
 }
 
+const loadIcon = (iconName, size) => {
+  // Remove 'Icon' suffix if present, as MUI does not use it
+  const formattedIconName = iconName.replace(/Icon$/, '');
+
+  const LucideIcon = LucideIcons[formattedIconName];
+  const MuiIcon = MuiIcons[formattedIconName];
+
+  // If LucideIcon exists, return it, otherwise return MuiIcon if it exists
+  if (LucideIcon) {
+    return <LucideIcon size={size} />;
+  } else if (MuiIcon) {
+    return <MuiIcon style={{ fontSize: size }} />;
+  } else {
+    console.error(`Icon "${formattedIconName}" not found in either icon libraries.`);
+    return null; // or a default icon
+  }
+};
+
 export default function MainMenu({ className, menus }: MainMenuProps) {
-  return menus ? (
-    <div className={className}>
+  const menuClasses = `md:w-56 ${className}`;
+
+  return !isEmpty(menus) ? (
+    <div className={menuClasses}>
       {menus.map((menu: Menu) => {
         const iconName = menu?.icon || 'CircleGauge';
-        const Icon = icons[iconName];
         return (
           <MainMenuItem
             key={menu.id}
             text={menu.name}
             link={menu.url}
-            icon={<Icon size={20} />}
+            icon={loadIcon(iconName, 20)}
           />
         );
       })}
     </div>
-  ) : (
-    ''
-  );
-
-  // return (
-  //   <div className={className}>
-  //     <MainMenuItem
-  //       text="Dashboard"
-  //       link="dashboard"
-  //       icon={<CircleGauge size={20} />}
-  //     />
-  //     <MainMenuItem
-  //       text="Organizations"
-  //       link="organizations"
-  //       icon={<Building size={20} />}
-  //     />
-  //     <MainMenuItem
-  //       text="Contacts"
-  //       link="contacts"
-  //       icon={<Users size={20} />}
-  //     />
-  //     <MainMenuItem
-  //       text="Reports"
-  //       link="reports"
-  //       icon={<Printer size={20} />}
-  //     />
-  //   </div>
-  // );
+  ) : null;
 }

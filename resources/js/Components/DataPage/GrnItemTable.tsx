@@ -66,7 +66,6 @@ const App = ({ handleAddData, products, data }) => {
           },
           Edit: ({ cell, column, row, table }) => {
             const handleSelectChange = (event, newValue) => {
-              //console.log(column, row, newValue, table, row._valuesCache);
               row._valuesCache[column.id] = newValue.id;
             };
 
@@ -255,6 +254,7 @@ const App = ({ handleAddData, products, data }) => {
       row: MRT_Row<GrnItem> | null,
       table: MRT_TableInstance<GrnItem> | null
     ) => {
+      values.free = values.free || 0;
       values.amount =
         parseFloat(values.unit_price) * parseFloat(values.quantity);
       let result = [values, ...grnItems];
@@ -262,7 +262,6 @@ const App = ({ handleAddData, products, data }) => {
         const updatedData = table.options.data.map(item =>
           item.id == row?.original.id ? values : item
         );
-        console.log(updatedData, 'updatedData');
         result = [...updatedData];
       }
       setGrnItems(result);
@@ -271,7 +270,6 @@ const App = ({ handleAddData, products, data }) => {
     // CREATE action for grnitems
     const handleCreateGrnItem: MRT_TableOptions<GrnItem>['onCreatingRowSave'] =
       async ({ row, values, table }) => {
-        console.log('creatingss', row, values);
         if (newValidationErrors(values)) return;
         const temporaryId = Date.now().toString();
         values.id = temporaryId;
@@ -282,10 +280,8 @@ const App = ({ handleAddData, products, data }) => {
     // UPDATE action for grnitems
     const handleSaveGrnItem: MRT_TableOptions<GrnItem>['onEditingRowSave'] =
       async ({ row, values, table }) => {
-        console.log('saving', values, row);
         if (newValidationErrors(values)) return;
         values.id = row.id;
-        console.log(values);
         createOrUpdateData(values, row, table);
         table.setEditingRow(null); // Exit editing mode
       };

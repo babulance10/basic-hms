@@ -127,7 +127,7 @@ export interface Manufacturer {
 }
 
 export interface GrnItem {
-  id: string;
+  id: number;
   product_id: number;
   pack: string;
   batch_no: string;
@@ -138,11 +138,11 @@ export interface GrnItem {
   unit_price: number;
   discount_percentage: number;
   amount: number;
-  gst?: number;
+  gst?: string;
 }
 
 export interface Grn {
-  id:number;
+  id: number;
   grn_no: string;
   received_date: string;
   bill_no: string;
@@ -167,6 +167,44 @@ export interface TotalTaxData {
   totalSgst: number;
   roundOff: number;
   netAmount: number;
+}
+
+export interface Visit {
+  id: number;
+  patient_id: number;
+  start_time: string; // ISO date string
+  end_time: string | null; // ISO date string or null
+  type: 'inpatient' | 'outpatient';
+  reason: string | null;
+  diagnosis: string | null;
+  notes: string | null;
+  status: 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
+  created_at: string; // ISO date string
+  updated_at: string; // ISO date string
+  deleted_at?: string;
+}
+
+export type PharmacyBilling = {
+  id: number;
+  visit_id: number;
+  pharmacist_id: number;
+  billing_date: string; // ISO date string
+  total_amount: number;
+  notes?: string; // Optional, can be null
+  gst: number;
+  billing_items: BillingItem[];
+  created_at?: string; // ISO date string
+  updated_at?: string; // ISO date string
+};
+
+export interface BillingItem {
+  id: string;
+  pharmacy_billing_id: string;
+  grn_item_id: number;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  gst?: number;
 }
 
 export type PaginatedData<T> = {
