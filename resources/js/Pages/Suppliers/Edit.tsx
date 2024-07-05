@@ -206,7 +206,7 @@ const SupplierEdit = () => {
           </div>
         </form>
       </div>
-      <h2 className="mt-12 mb-6 text-2xl font-bold">Products</h2>
+      {/* <h2 className="mt-12 mb-6 text-2xl font-bold">Products</h2>
       <Table
         columns={[
           { label: 'Name', name: 'name' },
@@ -217,7 +217,7 @@ const SupplierEdit = () => {
         ]}
         rows={supplier.products}
         getRowDetailsUrl={row => route('products.edit', row.id)}
-      />
+      /> */}
     </div>
   );
 };

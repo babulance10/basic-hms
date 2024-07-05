@@ -107,7 +107,6 @@ class GrnController extends Controller
         //     'grn' => new GrnResource($grn),
         // ]);
         $query = Grn::where('id', 1)->toSql();
-        dd($query);
         // Load the related GrnItems
         $grn->load('grnItems');
 
@@ -133,8 +132,6 @@ class GrnController extends Controller
         // $grn->update($validated);
         // return Redirect::back()->with('success', 'GRN updated successfully.');
         $validated = $request->validated();
-        // dd($validated);
-
         try {
             DB::transaction(function () use ($grn, $validated) {
                 // Update the GRN record

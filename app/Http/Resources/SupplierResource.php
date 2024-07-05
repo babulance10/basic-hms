@@ -30,7 +30,7 @@ class SupplierResource extends JsonResource
             'dl_no' => $this->dl_no,
             'cst_no' => $this->cst_no,
             'gst_no' => $this->gst_no,
-            'products' => ProductResource::collection($this->products)
+            //'products' => ProductResource::collection($this->products)
         ];
     }
 }
