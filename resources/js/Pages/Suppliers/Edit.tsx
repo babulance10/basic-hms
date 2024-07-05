@@ -49,7 +49,7 @@ const SupplierEdit = () => {
        <Head title={data.name} />
       <h1 className="mb-8 text-3xl font-bold">
         <Link
-          href={route('organizations')}
+          href={route('suppliers')}
           className="text-indigo-600 hover:text-indigo-700"
         >
           Suppliers
@@ -59,7 +59,7 @@ const SupplierEdit = () => {
       </h1>
       {supplier.deleted_at && (
         <TrashedMessage
-          message="This organization has been deleted."
+          message="This supplier has been deleted."
           onRestore={restore}
         />
       )}
